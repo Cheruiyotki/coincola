@@ -29,7 +29,7 @@ coincola/
 - ✅ Responsive login page (matches CoinCola design)
 - ✅ **Phone Login with Country Code Selection**
   - 🌍 Auto-detect country based on user's geolocation
-  - 🔍 Searchable country dropdown with 20+ countries
+  - 🔍 Searchable country dropdown (Nigeria, Ghana, Kenya)
   - 🏳️ Flag emojis for easy identification
   - 📱 Support for international phone numbers
 - ✅ Email login option
@@ -181,33 +181,13 @@ Authorization: Bearer <token>
 
 ## 🌍 Supported Countries for Phone Login
 
-The following countries are supported (20+ countries):
+The following countries are supported:
 
 | Country | Code | Flag |
 |---------|------|------|
-| United States | +1 | 🇺🇸 |
-| Canada | +1 | 🇨🇦 |
-| United Kingdom | +44 | 🇬🇧 |
 | Nigeria | +234 | 🇳🇬 |
 | Ghana | +233 | 🇬🇭 |
 | Kenya | +254 | 🇰🇪 |
-| South Africa | +27 | 🇿🇦 |
-| Egypt | +20 | 🇪🇬 |
-| India | +91 | 🇮🇳 |
-| China | +86 | 🇨🇳 |
-| Japan | +81 | 🇯🇵 |
-| Australia | +61 | 🇦🇺 |
-| Germany | +49 | 🇩🇪 |
-| France | +33 | 🇫🇷 |
-| Spain | +34 | 🇪🇸 |
-| Italy | +39 | 🇮🇹 |
-| Brazil | +55 | 🇧🇷 |
-| Mexico | +52 | 🇲🇽 |
-| Singapore | +65 | 🇸🇬 |
-| Malaysia | +60 | 🇲🇾 |
-| Thailand | +66 | 🇹🇭 |
-| Philippines | +63 | 🇵🇭 |
-| Indonesia | +62 | 🇮🇩 |
 
 **How Country Code Auto-Detection Works:**
 1. Browser requests user's geolocation (with permission)
