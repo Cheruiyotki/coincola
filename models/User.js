@@ -25,6 +25,14 @@ const userSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
+        unique: true,
+        sparse: true, // Allow null values but enforce uniqueness for non-null
+        validate: {
+            validator: function(v) {
+                return v == null || /^\+\d{1,3}\d{5,14}$/.test(v);
+            },
+            message: 'Phone must be in format +XXXXXXXXXXX',
+        },
     },
     isEmailVerified: {
         type: Boolean,

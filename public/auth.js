@@ -1,18 +1,62 @@
+// Country Data
+const COUNTRIES = [
+    { name: 'United States', code: '+1', flag: '🇺🇸' },
+    { name: 'Canada', code: '+1', flag: '🇨🇦' },
+    { name: 'United Kingdom', code: '+44', flag: '🇬🇧' },
+    { name: 'Nigeria', code: '+234', flag: '🇳🇬' },
+    { name: 'Ghana', code: '+233', flag: '🇬🇭' },
+    { name: 'Kenya', code: '+254', flag: '🇰🇪' },
+    { name: 'South Africa', code: '+27', flag: '🇿🇦' },
+    { name: 'Egypt', code: '+20', flag: '🇪🇬' },
+    { name: 'India', code: '+91', flag: '🇮🇳' },
+    { name: 'China', code: '+86', flag: '🇨🇳' },
+    { name: 'Japan', code: '+81', flag: '🇯🇵' },
+    { name: 'Australia', code: '+61', flag: '🇦🇺' },
+    { name: 'Germany', code: '+49', flag: '🇩🇪' },
+    { name: 'France', code: '+33', flag: '🇫🇷' },
+    { name: 'Spain', code: '+34', flag: '🇪🇸' },
+    { name: 'Italy', code: '+39', flag: '🇮🇹' },
+    { name: 'Brazil', code: '+55', flag: '🇧🇷' },
+    { name: 'Mexico', code: '+52', flag: '🇲🇽' },
+    { name: 'Singapore', code: '+65', flag: '🇸🇬' },
+    { name: 'Malaysia', code: '+60', flag: '🇲🇾' },
+    { name: 'Thailand', code: '+66', flag: '🇹🇭' },
+    { name: 'Philippines', code: '+63', flag: '🇵🇭' },
+    { name: 'Indonesia', code: '+62', flag: '🇮🇩' },
+];
+
 // DOM Elements
 const loginForm = document.getElementById('loginForm');
 const emailInput = document.getElementById('email');
+const phoneInput = document.getElementById('phone');
 const passwordInput = document.getElementById('password');
 const errorMessage = document.getElementById('errorMessage');
 const loadingSpinner = document.getElementById('loadingSpinner');
 const showPasswordBtn = document.querySelector('.show-password-btn');
 const tabButtons = document.querySelectorAll('.tab-btn');
+const phoneSection = document.getElementById('phoneSection');
+const emailSection = document.getElementById('emailSection');
+const countryCodeBtn = document.getElementById('countryCodeBtn');
+const countryDropdown = document.getElementById('countryDropdown');
+const countrySearch = document.getElementById('countrySearch');
+const countryList = document.getElementById('countryList');
+const flagEmoji = document.getElementById('flagEmoji');
+const countryCodeSpan = document.getElementById('countryCode');
+const selectedMethod = document.getElementById('selectedLoginMethod');
 
 // API Base URL
 const API_BASE_URL = 'http://localhost:3000/api';
 
+// State
+let currentTab = 'phone';
+let selectedCountry = null;
+let userCountry = null;
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
+    renderCountryList();
+    detectUserLocation();
     checkAuthStatus();
 });
 
@@ -22,6 +66,127 @@ function setupEventListeners() {
     showPasswordBtn.addEventListener('click', togglePasswordVisibility);
     tabButtons.forEach(btn => {
         btn.addEventListener('click', handleTabSwitch);
+    });
+    countryCodeBtn.addEventListener('click', toggleCountryDropdown);
+    countrySearch.addEventListener('input', filterCountries);
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.country-code-selector')) {
+            countryDropdown.classList.add('hidden');
+            countryCodeBtn.classList.remove('active');
+        }
+    });
+}
+
+// Detect User Location
+async function detectUserLocation() {
+    try {
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const { latitude, longitude } = position.coords;
+                    await fetchCountryFromLocation(latitude, longitude);
+                },
+                (error) => {
+                    console.log('Geolocation error:', error);
+                    setDefaultCountry();
+                }
+            );
+        } else {
+            setDefaultCountry();
+        }
+    } catch (error) {
+        console.log('Location detection error:', error);
+        setDefaultCountry();
+    }
+}
+
+// Fetch Country from Coordinates
+async function fetchCountryFromLocation(lat, lon) {
+    try {
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+        );
+        const data = await response.json();
+        const countryName = data.address?.country;
+        
+        const country = COUNTRIES.find(c => 
+            c.name.toLowerCase() === countryName?.toLowerCase()
+        );
+        
+        if (country) {
+            selectedCountry = country;
+            updateCountryDisplay();
+        } else {
+            setDefaultCountry();
+        }
+    } catch (error) {
+        console.log('Country fetch error:', error);
+        setDefaultCountry();
+    }
+}
+
+// Set Default Country
+function setDefaultCountry() {
+    selectedCountry = COUNTRIES[0]; // United States
+    updateCountryDisplay();
+}
+
+// Update Country Display
+function updateCountryDisplay() {
+    if (selectedCountry) {
+        flagEmoji.textContent = selectedCountry.flag;
+        countryCodeSpan.textContent = selectedCountry.code;
+        userCountry = selectedCountry;
+    }
+}
+
+// Render Country List
+function renderCountryList() {
+    countryList.innerHTML = COUNTRIES.map((country, index) => `
+        <div class="country-item" data-index="${index}">
+            <span class="flag">${country.flag}</span>
+            <span class="name">${country.name}</span>
+            <span class="code">${country.code}</span>
+        </div>
+    `).join('');
+    
+    // Add click listeners to country items
+    document.querySelectorAll('.country-item').forEach(item => {
+        item.addEventListener('click', selectCountry);
+    });
+}
+
+// Select Country
+function selectCountry(e) {
+    const index = e.currentTarget.dataset.index;
+    selectedCountry = COUNTRIES[index];
+    updateCountryDisplay();
+    countryDropdown.classList.add('hidden');
+    countryCodeBtn.classList.remove('active');
+    countrySearch.value = '';
+}
+
+// Toggle Country Dropdown
+function toggleCountryDropdown() {
+    countryDropdown.classList.toggle('hidden');
+    countryCodeBtn.classList.toggle('active');
+    if (!countryDropdown.classList.contains('hidden')) {
+        countrySearch.focus();
+    }
+}
+
+// Filter Countries
+function filterCountries(e) {
+    const query = e.target.value.toLowerCase();
+    const items = document.querySelectorAll('.country-item');
+    
+    items.forEach(item => {
+        const name = item.querySelector('.name').textContent.toLowerCase();
+        const code = item.querySelector('.code').textContent;
+        const matches = name.includes(query) || code.includes(query);
+        item.style.display = matches ? 'flex' : 'none';
     });
 }
 
@@ -33,27 +198,48 @@ function togglePasswordVisibility(e) {
     showPasswordBtn.textContent = isPassword ? '🙈' : '👁️';
 }
 
-// Handle Tab Switch (Phone/Email)
+// Handle Tab Switch
 function handleTabSwitch(e) {
     tabButtons.forEach(btn => btn.classList.remove('active'));
     e.target.classList.add('active');
     
-    const tabType = e.target.dataset.tab;
-    if (tabType === 'phone') {
-        emailInput.placeholder = 'Phone Number';
-        emailInput.type = 'tel';
+    currentTab = e.target.dataset.tab;
+    
+    if (currentTab === 'phone') {
+        phoneSection.classList.remove('hidden');
+        emailSection.classList.add('hidden');
+        phoneInput.focus();
+        selectedMethod.textContent = 'Login by phone';
+        emailInput.removeAttribute('required');
+        phoneInput.setCustomValidity('');
     } else {
-        emailInput.placeholder = 'Email';
-        emailInput.type = 'email';
+        phoneSection.classList.add('hidden');
+        emailSection.classList.remove('hidden');
+        emailInput.focus();
+        selectedMethod.textContent = 'Login by email';
+        phoneInput.removeAttribute('required');
+        emailInput.setCustomValidity('');
     }
+    
+    clearErrors();
 }
 
 // Validate Form
 function validateForm() {
     const errors = [];
 
-    if (!emailInput.value.trim()) {
-        errors.push('Email or phone number is required');
+    if (currentTab === 'phone') {
+        if (!phoneInput.value.trim()) {
+            errors.push('Phone number is required');
+        } else if (!/^\d{5,15}$/.test(phoneInput.value.replace(/\s/g, ''))) {
+            errors.push('Phone number must be 5-15 digits');
+        }
+    } else {
+        if (!emailInput.value.trim()) {
+            errors.push('Email is required');
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+            errors.push('Please enter a valid email');
+        }
     }
 
     if (!passwordInput.value) {
@@ -76,6 +262,12 @@ function showError(message) {
     }, 5000);
 }
 
+// Clear Errors
+function clearErrors() {
+    errorMessage.classList.add('hidden');
+    errorMessage.textContent = '';
+}
+
 // Handle Login
 async function handleLogin(e) {
     e.preventDefault();
@@ -93,15 +285,24 @@ async function handleLogin(e) {
     loginForm.style.pointerEvents = 'none';
 
     try {
+        let loginData = {
+            password: passwordInput.value,
+        };
+
+        if (currentTab === 'phone') {
+            loginData.phone = selectedCountry.code + phoneInput.value.replace(/\s/g, '');
+            loginData.loginType = 'phone';
+        } else {
+            loginData.email = emailInput.value.trim();
+            loginData.loginType = 'email';
+        }
+
         const response = await fetch(`${API_BASE_URL}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                email: emailInput.value.trim(),
-                password: passwordInput.value,
-            }),
+            body: JSON.stringify(loginData),
         });
 
         const data = await response.json();

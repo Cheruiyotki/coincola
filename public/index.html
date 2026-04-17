@@ -35,13 +35,37 @@
 
             <!-- Login Form -->
             <form id="loginForm" class="login-form">
-                <div class="form-group">
+                <!-- Phone Login Section -->
+                <div id="phoneSection" class="phone-section hidden">
+                    <div class="country-code-selector">
+                        <button type="button" class="country-code-btn" id="countryCodeBtn">
+                            <span class="flag" id="flagEmoji">🌍</span>
+                            <span class="code" id="countryCode">+1</span>
+                            <span class="arrow">▼</span>
+                        </button>
+                        <div class="country-dropdown hidden" id="countryDropdown">
+                            <div class="search-box">
+                                <input type="text" id="countrySearch" placeholder="Search country..." class="country-search">
+                            </div>
+                            <div class="country-list" id="countryList"></div>
+                        </div>
+                    </div>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        class="form-input phone-input" 
+                        placeholder="Phone number"
+                        pattern="[0-9]{5,15}"
+                    >
+                </div>
+
+                <!-- Email Login Section -->
+                <div id="emailSection" class="form-group">
                     <input 
                         type="email" 
                         id="email" 
                         class="form-input" 
                         placeholder="Email"
-                        required
                     >
                 </div>
 
@@ -57,6 +81,8 @@
                         <button type="button" class="show-password-btn">👁️</button>
                     </div>
                 </div>
+
+                <div id="selectedLoginMethod" class="selected-method"></div>
 
                 <button type="submit" class="btn-login">Log In</button>
 

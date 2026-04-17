@@ -27,9 +27,14 @@ coincola/
 
 ### Frontend
 - ✅ Responsive login page (matches CoinCola design)
-- ✅ Email/Phone login toggle
+- ✅ **Phone Login with Country Code Selection**
+  - 🌍 Auto-detect country based on user's geolocation
+  - 🔍 Searchable country dropdown with 20+ countries
+  - 🏳️ Flag emojis for easy identification
+  - 📱 Support for international phone numbers
+- ✅ Email login option
 - ✅ Password visibility toggle
-- ✅ Form validation
+- ✅ Form validation (client & server-side)
 - ✅ Error handling with user feedback
 - ✅ Loading states
 - ✅ Local storage for token management
@@ -108,20 +113,34 @@ Content-Type: application/json
 
 {
   "email": "user@example.com",
+  "phone": "+1234567890",
   "password": "password123",
   "firstName": "John",
   "lastName": "Doe"
 }
 ```
 
-**Login User**
+**Login with Email**
 ```http
 POST /api/auth/login
 Content-Type: application/json
 
 {
   "email": "user@example.com",
-  "password": "password123"
+  "password": "password123",
+  "loginType": "email"
+}
+```
+
+**Login with Phone**
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "phone": "+12345678901",
+  "password": "password123",
+  "loginType": "phone"
 }
 ```
 
@@ -140,14 +159,16 @@ Authorization: Bearer <token>
 ## Authentication Flow
 
 1. **Registration:**
-   - User submits email, password, name
+   - User submits email/phone, password, name
    - Backend validates and hashes password with bcrypt
    - User saved to MongoDB
    - JWT token generated and sent to client
 
 2. **Login:**
-   - User enters email/password
-   - Backend verifies credentials against hashed password
+   - User chooses email or phone login method
+   - For phone: Country code is auto-detected via geolocation
+   - User can select different country from searchable dropdown
+   - Backend verifies credentials
    - JWT token generated (expires in 7 days)
    - Token stored in localStorage
    - User redirected to dashboard
@@ -157,6 +178,43 @@ Authorization: Bearer <token>
    - Token sent in Authorization header
    - Backend verifies JWT using middleware
    - Protected resource accessed
+
+## 🌍 Supported Countries for Phone Login
+
+The following countries are supported (20+ countries):
+
+| Country | Code | Flag |
+|---------|------|------|
+| United States | +1 | 🇺🇸 |
+| Canada | +1 | 🇨🇦 |
+| United Kingdom | +44 | 🇬🇧 |
+| Nigeria | +234 | 🇳🇬 |
+| Ghana | +233 | 🇬🇭 |
+| Kenya | +254 | 🇰🇪 |
+| South Africa | +27 | 🇿🇦 |
+| Egypt | +20 | 🇪🇬 |
+| India | +91 | 🇮🇳 |
+| China | +86 | 🇨🇳 |
+| Japan | +81 | 🇯🇵 |
+| Australia | +61 | 🇦🇺 |
+| Germany | +49 | 🇩🇪 |
+| France | +33 | 🇫🇷 |
+| Spain | +34 | 🇪🇸 |
+| Italy | +39 | 🇮🇹 |
+| Brazil | +55 | 🇧🇷 |
+| Mexico | +52 | 🇲🇽 |
+| Singapore | +65 | 🇸🇬 |
+| Malaysia | +60 | 🇲🇾 |
+| Thailand | +66 | 🇹🇭 |
+| Philippines | +63 | 🇵🇭 |
+| Indonesia | +62 | 🇮🇩 |
+
+**How Country Code Auto-Detection Works:**
+1. Browser requests user's geolocation (with permission)
+2. Latitude & Longitude is reverse-geocoded using OpenStreetMap API
+3. Country name is matched with country code dictionary
+4. Default country is set in the dropdown
+5. User can change country anytime
 
 ## Security Features
 

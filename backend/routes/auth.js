@@ -8,22 +8,36 @@ const router = express.Router();
 // Register
 router.post('/register', async (req, res) => {
     try {
-        const { email, password, firstName, lastName } = req.body;
+        const { email, phone, password, firstName, lastName } = req.body;
 
         // Validate input
-        if (!email || !password) {
-            return res.status(400).json({ message: 'Email and password are required' });
+        if (!password) {
+            return res.status(400).json({ message: 'Password is required' });
+        }
+
+        if (!email && !phone) {
+            return res.status(400).json({ message: 'Email or phone number is required' });
         }
 
         // Check if user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(409).json({ message: 'Email already registered' });
+        if (email) {
+            const existingEmail = await User.findOne({ email });
+            if (existingEmail) {
+                return res.status(409).json({ message: 'Email already registered' });
+            }
+        }
+
+        if (phone) {
+            const existingPhone = await User.findOne({ phone });
+            if (existingPhone) {
+                return res.status(409).json({ message: 'Phone number already registered' });
+            }
         }
 
         // Create new user
         const user = new User({
-            email,
+            email: email || null,
+            phone: phone || null,
             password,
             firstName: firstName || '',
             lastName: lastName || '',
@@ -51,18 +65,33 @@ router.post('/register', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, phone, password, loginType } = req.body;
 
         // Validate input
-        if (!email || !password) {
-            return res.status(400).json({ message: 'Email and password are required' });
+        if (!password) {
+            return res.status(400).json({ message: 'Password is required' });
         }
 
-        // Find user and include password field
-        const user = await User.findOne({ email }).select('+password');
+        let user;
 
-        if (!user) {
-            return res.status(401).json({ message: 'Invalid email or password' });
+        if (loginType === 'phone') {
+            if (!phone) {
+                return res.status(400).json({ message: 'Phone number is required' });
+            }
+            // Find user by phone
+            user = await User.findOne({ phone }).select('+password');
+            if (!user) {
+                return res.status(401).json({ message: 'Invalid phone number or password' });
+            }
+        } else {
+            if (!email) {
+                return res.status(400).json({ message: 'Email is required' });
+            }
+            // Find user by email
+            user = await User.findOne({ email }).select('+password');
+            if (!user) {
+                return res.status(401).json({ message: 'Invalid email or password' });
+            }
         }
 
         // Check if account is active
@@ -74,7 +103,7 @@ router.post('/login', async (req, res) => {
         const isPasswordValid = await user.comparePassword(password);
 
         if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Invalid email or password' });
+            return res.status(401).json({ message: 'Invalid credentials' });
         }
 
         // Update last login
