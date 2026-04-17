@@ -1,0 +1,376 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.header {
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.logo-icon {
+    font-size: 1.8rem;
+}
+
+.logo-text {
+    color: #001a4d;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.btn-secondary {
+    background: transparent;
+    border: none;
+    color: #0052cc;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.btn-secondary:hover {
+    color: #003d99;
+}
+
+.settings-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.settings-btn:hover {
+    transform: rotate(90deg);
+}
+
+/* Main Container */
+.main-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.login-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    padding: 3rem;
+    width: 100%;
+    max-width: 450px;
+}
+
+.welcome-text {
+    text-align: center;
+    font-size: 2rem;
+    color: #001a4d;
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    border-bottom: 2px solid #f0f0f0;
+    margin-bottom: 2rem;
+    gap: 0;
+}
+
+.tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 1rem;
+    padding: 1rem 0;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+    font-weight: 500;
+    margin-bottom: -2px;
+}
+
+.tab-btn:hover {
+    color: #0052cc;
+}
+
+.tab-btn.active {
+    color: #0052cc;
+    border-bottom-color: #0052cc;
+}
+
+/* Form */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-input {
+    padding: 0.875rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #0052cc;
+    box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
+}
+
+.form-input::placeholder {
+    color: #ccc;
+}
+
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-wrapper .form-input {
+    width: 100%;
+    padding-right: 2.5rem;
+}
+
+.show-password-btn {
+    position: absolute;
+    right: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    transition: color 0.3s;
+}
+
+.show-password-btn:hover {
+    color: #0052cc;
+}
+
+/* Button */
+.btn-login {
+    background: linear-gradient(135deg, #0052cc 0%, #003d99 100%);
+    color: white;
+    border: none;
+    padding: 0.875rem 1rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 1rem;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 82, 204, 0.3);
+}
+
+.btn-login:active {
+    transform: translateY(0);
+}
+
+.btn-login:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Links */
+.forgot-password {
+    text-align: right;
+    color: #0052cc;
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color 0.3s;
+    margin-top: 0.5rem;
+}
+
+.forgot-password:hover {
+    color: #003d99;
+    text-decoration: underline;
+}
+
+/* Error Message */
+.error-message {
+    background: #fee;
+    border: 1px solid #fcc;
+    color: #c33;
+    padding: 1rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.error-message.hidden {
+    display: none;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    z-index: 10;
+}
+
+.loading-spinner.hidden {
+    display: none;
+}
+
+.spinner {
+    border: 4px solid #f0f0f0;
+    border-top: 4px solid #0052cc;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Footer */
+.footer {
+    background: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+    padding: 3rem 0 2rem;
+    margin-top: auto;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 2rem;
+}
+
+.footer-section h3 {
+    font-size: 0.75rem;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-section a {
+    color: #999;
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color 0.3s;
+}
+
+.footer-section a:hover {
+    color: #0052cc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header-container {
+        padding: 0 1rem;
+    }
+
+    .login-card {
+        padding: 2rem;
+    }
+
+    .welcome-text {
+        font-size: 1.5rem;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-actions {
+        gap: 0.5rem;
+    }
+
+    .btn-secondary {
+        font-size: 0.875rem;
+    }
+
+    .login-card {
+        padding: 1.5rem;
+    }
+
+    .welcome-text {
+        font-size: 1.25rem;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr;
+    }
+}

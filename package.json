@@ -1,0 +1,30 @@
+{
+  "name": "coincola-clone",
+  "version": "1.0.0",
+  "description": "CoinCola clone for educational purposes",
+  "main": "backend/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js",
+    "serve-frontend": "npx http-server public -p 8000"
+  },
+  "keywords": [
+    "cryptocurrency",
+    "exchange",
+    "bitcoin"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
