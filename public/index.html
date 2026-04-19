@@ -3,108 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoinCola - Login</title>
+    <title>CoinCola | Sign In</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <div class="header-container">
-            <div class="logo">
-                <span class="logo-icon">⚙️</span>
-                <span class="logo-text">CoinCola</span>
-            </div>
+            <a href="/" class="brand" aria-label="CoinCola home">
+                <span class="brand-mark" aria-hidden="true">CC</span>
+                <span class="brand-copy">
+                    <span class="brand-name">CoinCola</span>
+                    <span class="brand-tag">Crypto trading marketplace</span>
+                </span>
+            </a>
             <div class="header-actions">
-                <button class="btn-secondary">Log In</button>
-                <button class="btn-secondary">Sign Up</button>
-                <button class="settings-btn">⚙️</button>
+                <button class="btn-secondary" type="button">Log In</button>
+                <button class="btn-primary" type="button">Sign Up</button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="main-container">
-        <div class="login-card">
-            <h1 class="welcome-text">Hello, Welcome back</h1>
-            
-            <!-- Tabs -->
-            <div class="tabs">
-                <button class="tab-btn" data-tab="email">Login by email</button>
-                <button class="tab-btn active" data-tab="phone">Login by phone</button>
+        <section class="hero-panel" aria-label="CoinCola overview">
+            <p class="eyebrow">Trusted across Africa</p>
+            <h1>Trade crypto, gift cards, and stablecoins from one secure account.</h1>
+            <p class="hero-copy">
+                Sign in to continue with P2P trading, low-fee swaps, and a wallet experience
+                designed for fast everyday use.
+            </p>
+
+            <div class="hero-stats">
+                <article class="stat-card">
+                    <span class="stat-value">3</span>
+                    <span class="stat-label">Supported login countries</span>
+                </article>
+                <article class="stat-card">
+                    <span class="stat-value">24/7</span>
+                    <span class="stat-label">Access to your account</span>
+                </article>
+                <article class="stat-card">
+                    <span class="stat-value">7d</span>
+                    <span class="stat-label">Secure session token window</span>
+                </article>
+            </div>
+        </section>
+
+        <section class="login-card" aria-labelledby="loginHeading">
+            <p class="card-kicker">Welcome back</p>
+            <h2 id="loginHeading" class="welcome-text">Sign in to CoinCola</h2>
+            <p class="card-subtitle">Choose the login method that matches your account.</p>
+
+            <div class="tabs" role="tablist" aria-label="Login methods">
+                <button class="tab-btn" type="button" data-tab="email" role="tab" aria-selected="false">Login by email</button>
+                <button class="tab-btn active" type="button" data-tab="phone" role="tab" aria-selected="true">Login by phone</button>
             </div>
 
-            <!-- Login Form -->
-            <form id="loginForm" class="login-form">
-                <!-- Phone Login Section -->
-                <div id="phoneSection" class="phone-section hidden">
+            <form id="loginForm" class="login-form" novalidate>
+                <div id="phoneSection" class="phone-section">
                     <div class="country-code-selector">
-                        <button type="button" class="country-code-btn" id="countryCodeBtn">
-                            <span class="flag" id="flagEmoji">🌍</span>
-                            <span class="code" id="countryCode">+1</span>
-                            <span class="arrow">▼</span>
+                        <button type="button" class="country-code-btn" id="countryCodeBtn" aria-haspopup="listbox" aria-expanded="false">
+                            <span class="flag-badge" id="flagEmoji">NG</span>
+                            <span class="code" id="countryCode">+234</span>
+                            <span class="arrow" aria-hidden="true">v</span>
                         </button>
                         <div class="country-dropdown hidden" id="countryDropdown">
                             <div class="search-box">
-                                <input type="text" id="countrySearch" placeholder="Search country..." class="country-search">
+                                <input type="text" id="countrySearch" placeholder="Search country or code" class="country-search">
                             </div>
-                            <div class="country-list" id="countryList"></div>
+                            <div class="country-list" id="countryList" role="listbox"></div>
                         </div>
                     </div>
-                    <input 
-                        type="tel" 
-                        id="phone" 
-                        class="form-input phone-input" 
+                    <input
+                        type="tel"
+                        id="phone"
+                        class="form-input phone-input"
                         placeholder="Phone number"
-                        pattern="[0-9]{5,15}"
+                        inputmode="numeric"
+                        autocomplete="tel"
                     >
                 </div>
 
-                <!-- Email Login Section -->
-                <div id="emailSection" class="form-group">
-                    <input 
-                        type="email" 
-                        id="email" 
-                        class="form-input" 
+                <div id="emailSection" class="form-group hidden">
+                    <input
+                        type="email"
+                        id="email"
+                        class="form-input"
                         placeholder="Email"
+                        autocomplete="email"
                     >
                 </div>
 
                 <div class="form-group">
                     <div class="password-input-wrapper">
-                        <input 
-                            type="password" 
-                            id="password" 
-                            class="form-input" 
+                        <input
+                            type="password"
+                            id="password"
+                            class="form-input"
                             placeholder="Password"
+                            autocomplete="current-password"
                             required
                         >
-                        <button type="button" class="show-password-btn">👁️</button>
+                        <button type="button" class="show-password-btn" aria-label="Show password">Show</button>
                     </div>
                 </div>
 
-                <div id="selectedLoginMethod" class="selected-method"></div>
+                <div id="selectedLoginMethod" class="selected-method">Phone login selected</div>
 
                 <button type="submit" class="btn-login">Log In</button>
 
-                <a href="#" class="forgot-password">Forgot password</a>
+                <a href="#" class="forgot-password">Forgot password?</a>
             </form>
 
-            <!-- Error Message -->
-            <div id="errorMessage" class="error-message hidden"></div>
+            <div id="errorMessage" class="error-message hidden" role="alert"></div>
 
-            <!-- Loading State -->
-            <div id="loadingSpinner" class="loading-spinner hidden">
+            <div id="loadingSpinner" class="loading-spinner hidden" aria-live="polite" aria-label="Logging in">
                 <div class="spinner"></div>
             </div>
-        </div>
+        </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-top">
             <div class="footer-container">
                 <div class="footer-section">
-                    <h3>COMPANY</h3>
+                    <h3>Company</h3>
                     <ul>
                         <li><a href="#">About Us</a></li>
                         <li><a href="#">Announcement</a></li>
@@ -115,7 +137,7 @@
                 </div>
 
                 <div class="footer-section">
-                    <h3>RESOURCES</h3>
+                    <h3>Resources</h3>
                     <ul>
                         <li><a href="#">Support</a></li>
                         <li><a href="#">Fees</a></li>
@@ -127,36 +149,31 @@
                 </div>
 
                 <div class="footer-section">
-                    <h3>BUY ANYWHERE</h3>
+                    <h3>Buy Anywhere</h3>
                     <ul>
-                        <li><a href="#">Buy Bitcoin(BTC) in Nigeria</a></li>
-                        <li><a href="#">Buy Bitcoin(BTC) in Ghana</a></li>
-                        <li><a href="#">Buy Bitcoin(BTC) in Kenya</a></li>
-                        <li><a href="#">Buy Tether(USDT) in Nigeria</a></li>
-                        <li><a href="#">Buy Tether(USDT) in Ghana</a></li>
-                        <li><a href="#">Buy Tether(USDT) in Kenya</a></li>
+                        <li><a href="#">Buy Bitcoin (BTC) in Nigeria</a></li>
+                        <li><a href="#">Buy Bitcoin (BTC) in Ghana</a></li>
+                        <li><a href="#">Buy Bitcoin (BTC) in Kenya</a></li>
+                        <li><a href="#">Buy Tether (USDT) in Nigeria</a></li>
+                        <li><a href="#">Buy Tether (USDT) in Ghana</a></li>
+                        <li><a href="#">Buy Tether (USDT) in Kenya</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-section">
-                    <h3>SELL ANYWHERE</h3>
+                    <h3>Sell Anywhere</h3>
                     <ul>
-                        <li><a href="#">Sell Bitcoin(BTC) in Nigeria</a></li>
-                        <li><a href="#">Sell Bitcoin(BTC) in Ghana</a></li>
-                        <li><a href="#">Sell Bitcoin(BTC) in Kenya</a></li>
-                        <li><a href="#">Sell Tether(USDT) in Nigeria</a></li>
-                        <li><a href="#">Sell Tether(USDT) in Ghana</a></li>
-                        <li><a href="#">Sell Tether(USDT) in Kenya</a></li>
-                        <li><a href="#">Sell Walmart Gift Card Balance</a></li>
-                        <li><a href="#">Sell Apple Gift Card Balance</a></li>
-                        <li><a href="#">Sell Steam Gift Card Balance</a></li>
-                        <li><a href="#">Sell Google Play Gift Card Balance</a></li>
-                        <li><a href="#">Sell Vanilla Gift Card Balance</a></li>
+                        <li><a href="#">Sell Bitcoin (BTC) in Nigeria</a></li>
+                        <li><a href="#">Sell Bitcoin (BTC) in Ghana</a></li>
+                        <li><a href="#">Sell Bitcoin (BTC) in Kenya</a></li>
+                        <li><a href="#">Sell Tether (USDT) in Nigeria</a></li>
+                        <li><a href="#">Sell Tether (USDT) in Ghana</a></li>
+                        <li><a href="#">Sell Tether (USDT) in Kenya</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-section">
-                    <h3>COINCOLA AFRICA</h3>
+                    <h3>CoinCola Africa</h3>
                     <ul>
                         <li><a href="#">CoinCola Nigeria</a></li>
                         <li><a href="#">CoinCola Ghana</a></li>
@@ -167,8 +184,6 @@
                         <li><a href="#">USDT to Cedis</a></li>
                         <li><a href="#">BTC to KSH</a></li>
                         <li><a href="#">USDT to KSH</a></li>
-                        <li><a href="#">BTC to USD</a></li>
-                        <li><a href="#">USDT to USD</a></li>
                     </ul>
                 </div>
             </div>
@@ -178,38 +193,34 @@
             <div class="footer-middle-container">
                 <div class="footer-brand">
                     <div class="footer-logo">
-                        <span class="logo-icon">⚙️</span>
+                        <span class="brand-mark" aria-hidden="true">CC</span>
                         <span class="logo-text">CoinCola</span>
                     </div>
-                    <p>CoinCola is the global cryptocurrency trading marketplace and exchange, which provides spot/margin trading, P2P trading and gift card trading services at low fees. Our integrated platform has been designed from the ground up to offer the best cryptocurrency trading experience for users.</p>
+                    <p>
+                        CoinCola is a global cryptocurrency marketplace offering spot, margin,
+                        peer-to-peer, and gift card trading services with a focus on accessibility
+                        and low fees.
+                    </p>
                     <div class="app-stores">
-                        <a href="#" class="app-store-link">
-                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 135 40'%3E%3Ctext x='50' y='25' font-size='12' fill='%23000'%3EGoogle Play%3C/text%3E%3C/svg%3E" alt="Google Play">
-                        </a>
-                        <a href="#" class="app-store-link">
-                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 135 40'%3E%3Ctext x='55' y='25' font-size='12' fill='%23000'%3EApp Store%3C/text%3E%3C/svg%3E" alt="App Store">
-                        </a>
+                        <a href="#" class="app-store-link">Google Play</a>
+                        <a href="#" class="app-store-link">App Store</a>
                     </div>
                 </div>
 
-                <div class="footer-socials">
-                    <a href="#" class="social-link" title="Facebook">f</a>
-                    <a href="#" class="social-link" title="WhatsApp">w</a>
-                    <a href="#" class="social-link" title="Twitter">𝕏</a>
-                    <a href="#" class="social-link" title="Instagram">📷</a>
-                    <a href="#" class="social-link" title="LinkedIn">in</a>
-                    <a href="#" class="social-link" title="Telegram">✈️</a>
-                    <a href="#" class="social-link" title="YouTube">▶️</a>
-                    <a href="#" class="social-link" title="GitHub">⚙️</a>
-                    <a href="#" class="social-link" title="Medium">📝</a>
-                    <a href="#" class="social-link" title="Reddit">🔴</a>
-                    <a href="#" class="social-link" title="TikTok">♪</a>
+                <div class="footer-socials" aria-label="Social links">
+                    <a href="#" class="social-link" title="Facebook">FB</a>
+                    <a href="#" class="social-link" title="WhatsApp">WA</a>
+                    <a href="#" class="social-link" title="X">X</a>
+                    <a href="#" class="social-link" title="Instagram">IG</a>
+                    <a href="#" class="social-link" title="LinkedIn">IN</a>
+                    <a href="#" class="social-link" title="Telegram">TG</a>
+                    <a href="#" class="social-link" title="YouTube">YT</a>
                 </div>
             </div>
         </div>
 
         <div class="footer-bottom">
-            <p>&copy; 2016 - 2026 CoinCola All Rights Reserved</p>
+            <p>&copy; 2016 - 2026 CoinCola. All rights reserved.</p>
         </div>
     </footer>
 
