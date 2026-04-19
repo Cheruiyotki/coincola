@@ -1,130 +1,179 @@
-# CoinCola Clone - Login System
+# CoinCola Clone - Login UI and Auth Demo
 
-A full-stack login authentication system for educational purposes, mimicking the CoinCola platform design.
+A small full-stack authentication demo that recreates the CoinCola-style login experience shown in the reference screenshots.
+
+## Overview
+
+This project includes:
+
+- a static frontend in `public/` with a CoinCola-style login page
+- email and phone login tabs
+- a searchable country-code picker for phone login
+- client-side validation and loading/error states
+- an Express API for register, login, logout, and token verification
+- a simple protected `dashboard.html` page after successful login
+
+## Current UI
+
+The login page is set up to match the provided screenshots as closely as possible in structure and behavior:
+
+- top white header with CoinCola branding
+- active `Log In` button, `Sign Up` text action, and globe icon
+- large centered white login panel
+- `Login by email` active by default
+- email and phone tab switching
+- password field with eye toggle
+- footer link columns, lower brand section, app badges, and help button
 
 ## Project Structure
 
-```
+```text
 coincola/
-├── public/
-│   ├── index.html       # Login page HTML
-│   ├── styles.css       # Styling
-│   └── auth.js          # Frontend authentication logic
-├── backend/
-│   ├── server.js        # Express server
-│   ├── routes/
-│   │   └── auth.js      # Authentication routes
-│   └── middleware/
-│       └── auth.js      # JWT authentication middleware
-├── models/
-│   └── User.js          # MongoDB User schema
-├── package.json         # Dependencies
-├── .env.example         # Environment variables template
-└── README.md           # This file
+|-- public/
+|   |-- index.html        # CoinCola-style login page
+|   |-- styles.css        # Frontend styling
+|   |-- auth.js           # Login page behavior
+|   |-- dashboard.html    # Simple protected landing page
+|   `-- dashboard.js      # Dashboard auth guard and logout
+|-- backend/
+|   |-- server.js         # Express server and static hosting
+|   |-- routes/
+|   |   `-- auth.js       # Auth API routes
+|   `-- middleware/
+|       `-- auth.js       # JWT middleware
+|-- models/
+|   `-- User.js           # MongoDB user schema
+|-- package.json
+|-- package-lock.json
+`-- README.md
 ```
 
 ## Features
 
 ### Frontend
-- ✅ Responsive login page (matches CoinCola design)
-- ✅ **Phone Login with Country Code Selection**
-  - 🌍 Auto-detect country based on user's geolocation
-  - 🔍 Searchable country dropdown (Nigeria, Ghana, Kenya)
-  - 🏳️ Flag emojis for easy identification
-  - 📱 Support for international phone numbers
-- ✅ Email login option
-- ✅ Password visibility toggle
-- ✅ Form validation (client & server-side)
-- ✅ Error handling with user feedback
-- ✅ Loading states
-- ✅ Local storage for token management
-- ✅ Automatic redirect for authenticated users
+
+- CoinCola-style login layout based on the supplied screenshots
+- Email login tab
+- Phone login tab with country code selector
+- Country search for supported phone-login countries
+- Browser geolocation attempt for default country selection
+- Password visibility toggle
+- Inline validation and error display
+- Loading overlay during login
+- Local-storage token persistence
+- Automatic redirect to dashboard when the stored token is still valid
 
 ### Backend
-- ✅ User registration and login
-- ✅ Password hashing with bcrypt
-- ✅ JWT token generation and verification
-- ✅ MongoDB database integration
-- ✅ Protected routes with middleware
-- ✅ Last login tracking
-- ✅ Account status management
-- ✅ Input validation
-- ✅ CORS enabled
 
-## Installation
+- User registration
+- Login with email or phone
+- JWT token generation and verification
+- Password hashing with bcrypt
+- MongoDB persistence with Mongoose
+- Protected token verification route
+- Local static hosting for the frontend
+- CORS support for common local frontend origins
 
-### Prerequisites
-- Node.js (v14+)
-- MongoDB (local or Atlas)
-- npm or yarn
+## Supported Phone Login Countries
 
-### Setup
+The current phone-login country list is intentionally small and matches the app data:
 
-1. **Clone and navigate to project:**
-```bash
-cd coincola
-```
+| Country | Code |
+|---|---|
+| Nigeria | `+234` |
+| Ghana | `+233` |
+| Kenya | `+254` |
 
-2. **Install dependencies:**
+## Requirements
+
+- Node.js 14+
+- npm
+- MongoDB running locally or through MongoDB Atlas
+
+## Setup
+
+1. Install dependencies:
+
 ```bash
 npm install
 ```
 
-3. **Create .env file:**
-```bash
-cp .env.example .env
-```
+2. Create a `.env` file. Example:
 
-4. **Edit .env with your settings:**
 ```env
+PORT=3000
 MONGODB_URI=mongodb://localhost:27017/coincola
 JWT_SECRET=your-secure-secret-key-here
+CLIENT_URL=http://localhost:8000
 ```
 
-5. **Start MongoDB** (if running locally):
+3. Start MongoDB if you are using a local database.
+
+## Running the App
+
+### Option 1: Run everything from the backend server
+
+The backend serves the API and the static frontend.
+
 ```bash
-mongod
+npm start
 ```
 
-## Running the Application
+Then open:
 
-### Start Backend Server
+- `http://localhost:3000/`
+- `http://localhost:3000/dashboard`
+
+### Option 2: Run backend and frontend separately
+
+Start the backend:
+
 ```bash
 npm run dev
 ```
-Server runs on `http://localhost:3000`
 
-### Start Frontend (in another terminal)
+Start the static frontend in another terminal:
+
 ```bash
 npm run serve-frontend
 ```
-Frontend runs on `http://localhost:8000`
 
-Visit `http://localhost:8000` to see the login page.
+Then open:
+
+- frontend: `http://localhost:8000/`
+- backend API: `http://localhost:3000/api`
+
+The frontend JavaScript is already set up to talk to the backend on port `3000`.
 
 ## API Endpoints
 
-### Authentication
+### Register
 
-**Register User**
 ```http
 POST /api/auth/register
 Content-Type: application/json
+```
 
+Example body:
+
+```json
 {
   "email": "user@example.com",
-  "phone": "+1234567890",
+  "phone": "+2348012345678",
   "password": "password123",
   "firstName": "John",
   "lastName": "Doe"
 }
 ```
 
-**Login with Email**
+### Login With Email
+
 ```http
 POST /api/auth/login
 Content-Type: application/json
+```
 
+```json
 {
   "email": "user@example.com",
   "password": "password123",
@@ -132,176 +181,103 @@ Content-Type: application/json
 }
 ```
 
-**Login with Phone**
+### Login With Phone
+
 ```http
 POST /api/auth/login
 Content-Type: application/json
+```
 
+```json
 {
-  "phone": "+12345678901",
+  "phone": "+2348012345678",
   "password": "password123",
   "loginType": "phone"
 }
 ```
 
-**Verify Token**
+### Verify Token
+
 ```http
 GET /api/auth/verify
 Authorization: Bearer <token>
 ```
 
-**Logout**
+### Logout
+
 ```http
 POST /api/auth/logout
 Authorization: Bearer <token>
 ```
 
-## Authentication Flow
+## Auth Flow
 
-1. **Registration:**
-   - User submits email/phone, password, name
-   - Backend validates and hashes password with bcrypt
-   - User saved to MongoDB
-   - JWT token generated and sent to client
+1. The user opens the login page.
+2. The page defaults to `Login by email`, matching the screenshot layout.
+3. The user can switch to phone login and choose a supported country code.
+4. On successful login, the token and user are stored in `localStorage`.
+5. The user is redirected to `dashboard.html`.
+6. The dashboard re-verifies the token with `/api/auth/verify`.
+7. If the token is missing or invalid, the user is returned to the login page.
 
-2. **Login:**
-   - User chooses email or phone login method
-   - For phone: Country code is auto-detected via geolocation
-   - User can select different country from searchable dropdown
-   - Backend verifies credentials
-   - JWT token generated (expires in 7 days)
-   - Token stored in localStorage
-   - User redirected to dashboard
+## Notes About Static Hosting
 
-3. **Protected Routes:**
-   - Frontend checks for token in localStorage
-   - Token sent in Authorization header
-   - Backend verifies JWT using middleware
-   - Protected resource accessed
+`backend/server.js` now serves the contents of `public/`, so running the backend alone is enough to load the frontend locally.
 
-## 🌍 Supported Countries for Phone Login
+Allowed local frontend origins currently include:
 
-The following countries are supported:
+- `http://localhost:3000`
+- `http://127.0.0.1:3000`
+- `http://localhost:8000`
+- `http://127.0.0.1:8000`
 
-| Country | Code | Flag |
-|---------|------|------|
-| Nigeria | +234 | 🇳🇬 |
-| Ghana | +233 | 🇬🇭 |
-| Kenya | +254 | 🇰🇪 |
+If `CLIENT_URL` is set in `.env`, that value is also allowed.
 
-**How Country Code Auto-Detection Works:**
-1. Browser requests user's geolocation (with permission)
-2. Latitude & Longitude is reverse-geocoded using OpenStreetMap API
-3. Country name is matched with country code dictionary
-4. Default country is set in the dropdown
-5. User can change country anytime
+## Verification Performed
 
-## Security Features
+The following checks were run after the UI and behavior updates:
 
-- ✅ Password hashing with bcrypt (10 salt rounds)
-- ✅ JWT tokens with expiration
-- ✅ CORS protection
-- ✅ Input validation
-- ✅ Account status verification
-- ✅ Secure password comparison
-- ✅ Token verification middleware
-- ✅ Error messages don't leak information
+- `node --check public/auth.js`
+- `node --check public/dashboard.js`
+- `node --check backend/server.js`
 
-## Testing the Login
-
-**Test Account:**
-```
-Email: test@example.com
-Password: password123
-```
-
-**Create an account:**
-1. Modify `/public/auth.js` to include a registration function
-2. Or use MongoDB to insert a test user directly
-
-## Styling
-
-The frontend uses:
-- **CSS Grid** for responsive layouts
-- **Flexbox** for component alignment
-- **CSS Variables** for easy theming
-- **Linear Gradients** for backgrounds
-- **Smooth Transitions** for interactions
-- **Mobile-first Responsive Design**
-
-## Environment Variables
-
-| Variable | Description |
-|----------|-------------|
-| PORT | Server port (default: 3000) |
-| MONGODB_URI | MongoDB connection string |
-| JWT_SECRET | Secret key for JWT signing |
-| CLIENT_URL | Frontend URL for CORS |
-
-## Database Schema
-
-**User Model:**
-```javascript
-{
-  _id: ObjectId,
-  email: String (unique, lowercase),
-  password: String (hashed),
-  firstName: String,
-  lastName: String,
-  phone: String,
-  isEmailVerified: Boolean,
-  isPhoneVerified: Boolean,
-  twoFactorEnabled: Boolean,
-  status: String (active|suspended|deleted),
-  lastLogin: Date,
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-## Next Steps for Development
-
-1. **Email Verification:**
-   - Send verification email on registration
-   - Implement email confirmation flow
-
-2. **Password Reset:**
-   - Add forgot password functionality
-   - Send reset link via email
-
-3. **Two-Factor Authentication:**
-   - Implement OTP or authenticator app
-
-4. **Social Login:**
-   - Add Google/GitHub OAuth
-
-5. **Dashboard:**
-   - Create protected dashboard page
-   - Add user profile management
-
-6. **Advanced Security:**
-   - Rate limiting on login attempts
-   - IP whitelisting
-   - Session management
+These confirm the updated scripts parse correctly.
 
 ## Troubleshooting
 
-**"MongoDB connection error"**
-- Ensure MongoDB is running
-- Check MONGODB_URI in .env
+### MongoDB connection error
 
-**"CORS error"**
-- Check CLIENT_URL matches your frontend
-- Ensure CORS is properly configured
+- Make sure MongoDB is running
+- Confirm `MONGODB_URI` is correct in `.env`
 
-**"Invalid token"**
-- Token might be expired (7-day expiration)
-- Delete from localStorage and login again
+### CORS error
+
+- Make sure your frontend is running on one of the allowed local origins
+- If needed, set `CLIENT_URL` explicitly in `.env`
+
+### Login succeeds but redirect fails
+
+- Make sure the backend is running if you are using token verification
+- If using the static frontend on port `8000`, also run the backend on port `3000`
+
+### Invalid token
+
+- Clear `localStorage`
+- Log in again to generate a fresh token
+
+## Future Improvements
+
+- registration page and UI
+- forgot-password flow
+- richer dashboard
+- social login
+- rate limiting on login attempts
+- improved test coverage
 
 ## License
 
-MIT License - For educational purposes only.
+MIT
 
 ## Disclaimer
 
-This is an educational project created to learn authentication concepts. It's not associated with or endorsed by CoinCola. Use responsibly and follow all legal requirements when deploying to production.
+This is an educational project and is not affiliated with or endorsed by CoinCola.
