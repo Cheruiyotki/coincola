@@ -33,7 +33,7 @@ const API_BASE_URL = (() => {
     return `http://${resolvedHost}:3000/api`;
 })();
 
-let currentTab = 'phone';
+let currentTab = 'email';
 let selectedCountry = COUNTRIES[0];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -166,8 +166,8 @@ function togglePasswordVisibility(event) {
 
     const showingPassword = passwordInput.type === 'text';
     passwordInput.type = showingPassword ? 'password' : 'text';
-    showPasswordBtn.textContent = showingPassword ? 'Show' : 'Hide';
     showPasswordBtn.setAttribute('aria-label', showingPassword ? 'Show password' : 'Hide password');
+    showPasswordBtn.classList.toggle('is-visible', !showingPassword);
 }
 
 function handleTabSwitch(event) {
@@ -194,6 +194,10 @@ function setActiveTab(nextTab) {
 }
 
 function updateLoginSummary() {
+    if (!selectedMethod) {
+        return;
+    }
+
     if (currentTab === 'phone') {
         selectedMethod.textContent = `Phone login selected for ${selectedCountry.name} ${selectedCountry.code}`;
         return;
