@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js",
-    "serve-frontend": "npx http-server public -p 8000"
+    "serve-frontend": "npx http-server public -p 8000 -a localhost"
   },
   "keywords": [
     "cryptocurrency",
