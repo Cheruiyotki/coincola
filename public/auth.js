@@ -240,9 +240,20 @@ function showError(message) {
     errorMessage.classList.remove('hidden');
 }
 
+function showSuccess(message) {
+    errorMessage.textContent = message;
+    errorMessage.classList.remove('hidden');
+    errorMessage.style.borderColor = '#c9e6c9';
+    errorMessage.style.background = '#f3fff3';
+    errorMessage.style.color = '#2f7a35';
+}
+
 function clearErrors() {
     errorMessage.textContent = '';
     errorMessage.classList.add('hidden');
+    errorMessage.style.borderColor = '';
+    errorMessage.style.background = '';
+    errorMessage.style.color = '';
 }
 
 async function handleLogin(event) {
@@ -287,7 +298,7 @@ async function handleLogin(event) {
 
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
-        window.location.href = './dashboard.html';
+        showSuccess('Login successful.');
     } catch (error) {
         showError(error.message || 'Unable to log in right now');
     } finally {
@@ -313,13 +324,10 @@ async function verifyToken(token) {
             },
         });
 
-        if (response.ok) {
-            window.location.href = './dashboard.html';
-            return;
+        if (!response.ok) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
         }
-
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
     } catch (error) {
         console.info('Token verification skipped:', error.message);
     }

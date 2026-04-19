@@ -1,21 +1,23 @@
-# CoinCola Clone - Login UI and Auth Demo
+# CoinCola Clone - Login UI Demo
 
-A small full-stack authentication demo that recreates the CoinCola-style login experience shown in the reference screenshots.
+A small full-stack authentication demo focused on a single CoinCola-style login page based on the screenshots you provided.
 
 ## Overview
 
-This project includes:
+This project now only keeps the login screen as the frontend target.
 
-- a static frontend in `public/` with a CoinCola-style login page
+It includes:
+
+- a static `index.html` login page styled to match the reference screenshots
 - email and phone login tabs
 - a searchable country-code picker for phone login
 - client-side validation and loading/error states
 - an Express API for register, login, logout, and token verification
-- a simple protected `dashboard.html` page after successful login
+- token storage in `localStorage` after successful login
 
 ## Current UI
 
-The login page is set up to match the provided screenshots as closely as possible in structure and behavior:
+The frontend is intentionally centered around the login page only:
 
 - top white header with CoinCola branding
 - active `Log In` button, `Sign Up` text action, and globe icon
@@ -25,6 +27,8 @@ The login page is set up to match the provided screenshots as closely as possibl
 - password field with eye toggle
 - footer link columns, lower brand section, app badges, and help button
 
+There is no separate dashboard screen in the screenshot-based version.
+
 ## Project Structure
 
 ```text
@@ -32,9 +36,7 @@ coincola/
 |-- public/
 |   |-- index.html        # CoinCola-style login page
 |   |-- styles.css        # Frontend styling
-|   |-- auth.js           # Login page behavior
-|   |-- dashboard.html    # Simple protected landing page
-|   `-- dashboard.js      # Dashboard auth guard and logout
+|   `-- auth.js           # Login page behavior
 |-- backend/
 |   |-- server.js         # Express server and static hosting
 |   |-- routes/
@@ -60,8 +62,8 @@ coincola/
 - Password visibility toggle
 - Inline validation and error display
 - Loading overlay during login
-- Local-storage token persistence
-- Automatic redirect to dashboard when the stored token is still valid
+- Token persistence after successful login
+- Success feedback on the login page after a valid login
 
 ### Backend
 
@@ -122,7 +124,6 @@ npm start
 Then open:
 
 - `http://localhost:3000/`
-- `http://localhost:3000/dashboard`
 
 ### Option 2: Run backend and frontend separately
 
@@ -216,13 +217,11 @@ Authorization: Bearer <token>
 2. The page defaults to `Login by email`, matching the screenshot layout.
 3. The user can switch to phone login and choose a supported country code.
 4. On successful login, the token and user are stored in `localStorage`.
-5. The user is redirected to `dashboard.html`.
-6. The dashboard re-verifies the token with `/api/auth/verify`.
-7. If the token is missing or invalid, the user is returned to the login page.
+5. The page stays on the login screen and shows a success message.
 
 ## Notes About Static Hosting
 
-`backend/server.js` now serves the contents of `public/`, so running the backend alone is enough to load the frontend locally.
+`backend/server.js` serves the contents of `public/`, so running the backend alone is enough to load the frontend locally.
 
 Allowed local frontend origins currently include:
 
@@ -238,7 +237,6 @@ If `CLIENT_URL` is set in `.env`, that value is also allowed.
 The following checks were run after the UI and behavior updates:
 
 - `node --check public/auth.js`
-- `node --check public/dashboard.js`
 - `node --check backend/server.js`
 
 These confirm the updated scripts parse correctly.
@@ -255,9 +253,9 @@ These confirm the updated scripts parse correctly.
 - Make sure your frontend is running on one of the allowed local origins
 - If needed, set `CLIENT_URL` explicitly in `.env`
 
-### Login succeeds but redirect fails
+### Login request fails
 
-- Make sure the backend is running if you are using token verification
+- Make sure the backend is running on port `3000`
 - If using the static frontend on port `8000`, also run the backend on port `3000`
 
 ### Invalid token
@@ -269,7 +267,6 @@ These confirm the updated scripts parse correctly.
 
 - registration page and UI
 - forgot-password flow
-- richer dashboard
 - social login
 - rate limiting on login attempts
 - improved test coverage

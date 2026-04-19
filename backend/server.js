@@ -54,10 +54,6 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'OK' });
 });
 
-app.get('/dashboard', (req, res) => {
-    res.sendFile(path.join(publicDir, 'dashboard.html'));
-});
-
 // Error Handler
 app.use((err, req, res, next) => {
     console.error(err.stack);
